@@ -1,6 +1,5 @@
-use axum::{Router, routing::get};
-use crate::handlers::ping;
-
+use crate::handlers::{auth, ping};
+use axum::{routing::get, routing::post, Router};
 
 /// Build the router for the application
 ///
@@ -9,4 +8,5 @@ use crate::handlers::ping;
 pub fn build_router() -> Router {
     Router::new()
         .route("/ping", get(ping::ping))
+        .route("/auth", post(auth::auth))
 }
