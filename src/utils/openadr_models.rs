@@ -6,57 +6,51 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct OpenADREvent {
     /// VTN provisioned ID
-    id: Option<String>,
+    pub id: Option<String>,
     /// VTN Provisioned on creation
-    created_date_time: Option<String>,
+    pub created_date_time: Option<String>,
     /// VTN Provisioned on modification
-    modification_date_time: Option<String>,
+    pub modification_date_time: Option<String>,
     /// Used as discriminator, eg. notification object
-    object_type: Option<ObjectTypes>,
+    pub object_type: Option<ObjectTypes>,
     /// Program ID
-    program_id: String,
+    pub program_id: String,
     /// Event name
-    event_name: Option<String>,
+    pub event_name: Option<String>,
     /// Priority of the event - lower number is higher priority
-    priority: Option<i64>,
+    pub priority: Option<i64>,
     /// Targets
-    targets: Option<Vec<ValuesMap>>,
+    pub targets: Option<Vec<ValuesMap>>,
     /// Report descriptors
-    report_descriptors: Option<Vec<ReportDescriptor>>,
+    pub report_descriptors: Option<Vec<ReportDescriptor>>,
     /// Payload descriptors
-    payload_descriptors: Option<Vec<EventPayloadDescriptor>>,
+    pub payload_descriptors: Option<Vec<EventPayloadDescriptor>>,
     /// Interval Period
-    interval_period: Option<IntervalPeriod>,
+    pub interval_period: Option<IntervalPeriod>,
     /// Intervals
-    intervals: Vec<Interval>,
+    pub intervals: Vec<Interval>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EventPayloadDescriptor {
     /// Object type discriminator
     #[serde(rename = "objectType")]
-    object_type: Option<PayloadDescriptorType>, //always event here
+    pub object_type: Option<PayloadDescriptorType>, //always event here
     /// payload type - Example: PRICE
     #[serde(rename = "payloadType")]
-    payload_type: String,
+    pub payload_type: String,
     /// Units - Units of measure
-    units: Option<String>,
+    pub units: Option<String>,
     /// Currency - Currency of the payload - Example: USD
-    currency: Option<String>,
+    pub currency: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum PayloadDescriptorType {
-    EVENT,
-    REPORT,
-}
-impl PayloadDescriptorType {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            PayloadDescriptorType::EVENT => "EVENT_PAYLOAD_DESCRIPTOR",
-            PayloadDescriptorType::REPORT => "REPORT_PAYLOAD_DESCRIPTOR",
-        }
-    }
+    #[serde(rename = "EVENT_PAYLOAD_DESCRIPTOR")]
+    EventPayloadDescriptor(String),
+    #[serde(rename = "REPORT_PAYLOAD_DESCRIPTOR")]
+    ReportPayloadDescriptor(String),
 }
 
 /// An object that may be used to request a report from a VEN
@@ -64,64 +58,63 @@ impl PayloadDescriptorType {
 pub struct ReportDescriptor {
     /// Payload type - Example: USAGE
     #[serde(rename = "payloadType")]
-    payload_type: String,
+    pub payload_type: String,
     /// Reading type - Example: DIRECT_READ
     #[serde(rename = "readingType")]
-    reading_type: Option<String>,
+    pub reading_type: Option<String>,
     /// Unit of measure - Example: kWh
-    units: Option<String>,
+    pub units: Option<String>,
     /// Targets
-    targets: Option<Vec<ValuesMap>>,
+    pub targets: Option<Vec<ValuesMap>>,
     /// Aggregate - True if the report should data from all targeted results, false if the report should be generated for each target
-    aggregate: Option<bool>,
+    pub aggregate: Option<bool>,
     /// Start interval - the interval on which to generate a report, -1 to generate a report at the end of the last interval
     #[serde(rename = "startInterval")]
-    start_interval: Option<i64>,
+    pub start_interval: Option<i64>,
     /// num intervals - the number of intervals to generate a report for, -1 to generate a report for all intervals
     #[serde(rename = "numIntervals")]
-    num_intervals: Option<i64>,
+    pub num_intervals: Option<i64>,
     /// Historical - True indicates report on intervals preceding startInterval.
     /// False indicates report on intervals following startInterval (e.g. forecast).
-    historical: Option<bool>,
+    pub historical: Option<bool>,
     /// Frequency - the number of intervals that elapse between the reports, -1 indicates the same as numIntervals
-    frequency: Option<i64>,
+    pub frequency: Option<i64>,
     /// Repeat - the number of times to repeat the report, -1 indicates repeat indefinitely
-    repeat: Option<i64>,
+    pub repeat: Option<i64>,
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Interval {
     /// Id of the interval
-    id: i64,
+    pub id: i64,
     /// Interval period
     #[serde(rename = "intervalPeriod")]
-    interval_period: Option<IntervalPeriod>,
+    pub interval_period: Option<IntervalPeriod>,
     /// Interval period payloads
-    payloads: Vec<ValuesMap>,
+    pub payloads: Vec<ValuesMap>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct IntervalPeriod {
     /// Start time of the interval in iso8601 format
-    start: String,
+    pub start: String,
     /// Duration of the interval in iso8601 format
-    duration: Option<String>,
+    pub duration: Option<String>,
     /// Randomize start time range, can be added as a duration to the start time
     #[serde(rename = "randomizeStart")]
-    randomize_start: Option<String>,
+    pub randomize_start: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ValuesMap {
     #[serde(rename = "type")]
     pub kind: String,
-    values: Vec<Values>,
+    pub values: Vec<Values>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
-enum Values {
+pub enum Values {
     String(String),
     Integer(i64),
     Boolean(bool),
