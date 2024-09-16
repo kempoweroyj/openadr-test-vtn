@@ -7,9 +7,15 @@ use log::debug;
 
 /// Handler for the /events endpoint
 ///
-/// This function returns a dummy OpenADR event object for an event in the past.
+/// This function returns a dummy OpenADR event object for an event in the past to test basic event handling response
+/// mimicking a GET Events call to the VTN server. If a new event has been generated using the generate_event handler, the new generated event
+/// will also be returned here.
 ///
-/// Future implementation should return a new event object if a generate_test_event handler is called/implemented
+/// # Parameters
+/// - `headers`: The headers of the request
+///
+/// # Returns
+/// - `Result<Json<OpenADREvent>, (StatusCode, String)>`: The OpenADR event object if the auth is successful, otherwise an error
 pub async fn get_events(headers: HeaderMap) -> Result<Json<OpenADREvent>, (StatusCode, String)> {
     // auth
     let valid = authorizer(headers).await;
@@ -89,7 +95,7 @@ pub async fn get_events(headers: HeaderMap) -> Result<Json<OpenADREvent>, (Statu
         report_descriptors: Some(vec![]),
         payload_descriptors: Some(vec![
             openadr_models::EventPayloadDescriptor {
-                object_type: Some(openadr_models::PayloadDescriptorType::EventPayloadDescriptor("EVENT_PAYLOAD_DESCRIPTOR".to_string())),
+                object_type: Some(openadr_models::PayloadDescriptorType::EVENT),
                 payload_type: "IMPORT_CAPACITY_LIMIT".to_string(),
                 units: Some("KW".to_string()),
                 currency: None,
