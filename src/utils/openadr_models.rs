@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// OpenADR event object
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename = "Event")]
 #[serde(rename_all = "camelCase")]
 pub struct OpenADREvent {
@@ -42,7 +42,7 @@ pub struct OpenADREvent {
     pub intervals: Vec<Interval>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct EventPayloadDescriptor {
     /// Object type discriminator
     #[serde(rename = "objectType")]
@@ -59,7 +59,7 @@ pub struct EventPayloadDescriptor {
     pub currency: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum PayloadDescriptorType {
     #[serde(rename = "EVENT_PAYLOAD_DESCRIPTOR")]
     EVENT,
@@ -68,7 +68,7 @@ pub enum PayloadDescriptorType {
 }
 
 /// An object that may be used to request a report from a VEN
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ReportDescriptor {
     /// Payload type - Example: USAGE
     #[serde(rename = "payloadType")]
@@ -106,7 +106,7 @@ pub struct ReportDescriptor {
     pub repeat: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Interval {
     /// Id of the interval
     pub id: i64,
@@ -118,7 +118,7 @@ pub struct Interval {
     pub payloads: Vec<ValuesMap>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct IntervalPeriod {
     /// Start time of the interval in iso8601 format
     pub start: String,
@@ -131,14 +131,14 @@ pub struct IntervalPeriod {
     pub randomize_start: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ValuesMap {
     #[serde(rename = "type")]
     pub kind: String,
     pub values: Vec<Values>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum Values {
     String(String),
@@ -146,7 +146,7 @@ pub enum Values {
     Boolean(bool),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ObjectTypes {
     PROGRAM,
     EVENT,
