@@ -1,3 +1,4 @@
+use crate::handlers::clear_events_list::post_clear_events;
 use crate::handlers::{auth, events, generate_polled_event, ping};
 use crate::AppState;
 use axum::{routing::get, routing::post, Router};
@@ -16,5 +17,6 @@ pub fn build_router(shared_memory: Arc<AppState>) -> Router {
             "/generate_event",
             post(generate_polled_event::generate_polled_event),
         )
+        .route("/clear_events", post(post_clear_events))
         .with_state(shared_memory)
 }
