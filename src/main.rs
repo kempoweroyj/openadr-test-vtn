@@ -1,5 +1,6 @@
 use crate::utils::init_storage::dummy_event_to_storage;
 use crate::utils::openadr_models::{OpenADREvent, Subscription};
+use dashmap::DashMap;
 use log::info;
 use tokio::sync::RwLock;
 
@@ -8,8 +9,10 @@ mod router;
 mod utils;
 
 pub struct AppState {
+    /// Events storage array
     pub event_storage: RwLock<Vec<OpenADREvent>>,
-    pub subscriptions: RwLock<Vec<Subscription>>,
+    /// Subscriptions storage map. Key is Subscription id, content is the subscription object itself.
+    pub subscriptions: DashMap<String, Subscription>,
 }
 
 #[tokio::main]
