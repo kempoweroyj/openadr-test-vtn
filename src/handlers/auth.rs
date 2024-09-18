@@ -14,7 +14,7 @@ use log::debug;
 ///
 /// # Returns
 /// - `Result<&'static str, (StatusCode, String)>`: The token if the auth is successful, otherwise an error
-pub async fn auth(
+pub async fn post_auth(
     headers: HeaderMap,
     mut body: Multipart,
 ) -> Result<&'static str, (StatusCode, String)> {

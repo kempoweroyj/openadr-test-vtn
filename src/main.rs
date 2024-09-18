@@ -1,5 +1,5 @@
-use crate::utils::init_event_storage::dummy_event_to_storage;
-use crate::utils::openadr_models::OpenADREvent;
+use crate::utils::init_storage::dummy_event_to_storage;
+use crate::utils::openadr_models::{OpenADREvent, Subscription};
 use log::info;
 use tokio::sync::RwLock;
 
@@ -9,6 +9,7 @@ mod utils;
 
 pub struct AppState {
     pub event_storage: RwLock<Vec<OpenADREvent>>,
+    pub subscriptions: RwLock<Vec<Subscription>>,
 }
 
 #[tokio::main]
@@ -25,7 +26,7 @@ async fn main() {
     // This is much quicker to deal with for proof of concept purposes.
     //
     // The event storage is a array of OpenADR events which gets held in a rwlock and Arc shared state for the handlers to access
-    let event_storage = utils::init_event_storage::init_event_storage().await;
+    let event_storage = utils::init_storage::init_storage().await;
     dummy_event_to_storage(&event_storage).await;
 
     // Build the router

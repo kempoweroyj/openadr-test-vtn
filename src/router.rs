@@ -10,12 +10,12 @@ use std::sync::Arc;
 /// - `Router`: The router for the application
 pub fn build_router(shared_memory: Arc<AppState>) -> Router {
     Router::new()
-        .route("/ping", get(ping::ping))
-        .route("/auth", post(auth::auth))
+        .route("/ping", get(ping::get_ping))
+        .route("/auth", post(auth::post_auth))
         .route("/events", get(events::get_events))
         .route(
             "/generate_event",
-            post(generate_polled_event::generate_polled_event),
+            post(generate_polled_event::post_generate_polled_event),
         )
         .route("/clear_events", post(post_clear_events))
         .with_state(shared_memory)

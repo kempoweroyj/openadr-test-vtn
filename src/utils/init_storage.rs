@@ -1,5 +1,5 @@
 use crate::utils::openadr_models;
-use crate::utils::openadr_models::{OpenADREvent, Values};
+use crate::utils::openadr_models::{OpenADREvent, Subscription, Values};
 use crate::AppState;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -12,9 +12,10 @@ use tokio::sync::RwLock;
 ///
 /// # Returns
 /// - `Arc<AppState>`: The shared memory state of the application
-pub async fn init_event_storage() -> Arc<AppState> {
+pub async fn init_storage() -> Arc<AppState> {
     let event_storage: RwLock<Vec<OpenADREvent>> = RwLock::new(Vec::new());
-    let shared_memory = AppState { event_storage };
+    let subscriptions: RwLock<Vec<Subscription>> = RwLock::new(Vec::new());
+    let shared_memory = AppState { event_storage, subscriptions };
     Arc::new(shared_memory)
 }
 

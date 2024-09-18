@@ -12,7 +12,7 @@ use std::sync::Arc;
 /// The event will be generated and placed into the shared memory.
 /// The use case for this is that automated tests will be able to generate an event with known parameters
 /// which can then be polled and the flow of the event can be tested.
-pub async fn generate_polled_event(
+pub async fn post_generate_polled_event(
     headers: HeaderMap,
     shared_mem: State<Arc<AppState>>,
     body: Json<EventParameters>,
