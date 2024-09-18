@@ -167,3 +167,44 @@ impl ObjectTypes {
         }
     }
 }
+
+/// OpenADR 3.0 Subscription Model
+///
+/// This module contains the Subscription model for OpenADR 3.0. This model is used to represent the Subscription object in the OpenADR 3.0 specification.
+/// Will be used to test subscription handling for the VEN.
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Subscription {
+    pub id: Option<String>,
+    pub created_date_time: Option<String>,
+    pub modification_date_time: Option<String>,
+    pub object_type: Option<ObjectTypes>,
+    pub client_name: String,
+    #[serde(rename = "programID")]
+    pub program_id: String,
+    pub object_operations: Vec<ObjectOperation>,
+    pub targets: Option<Vec<ValuesMap>>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ObjectOperation {
+    pub object_type: Vec<ObjectTypes>,
+    pub operations: Operations,
+    pub callback_url: String,
+    pub bearer_token: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct Operations {
+    pub operations: Vec<Operation>,
+}
+
+/// Possible subscription operation types
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub enum Operation {
+    GET,
+    POST,
+    PUT,
+    DELETE,
+}
