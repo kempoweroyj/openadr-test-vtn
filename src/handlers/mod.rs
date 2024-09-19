@@ -5,3 +5,4 @@ pub(crate) mod generate_polled_event;
 pub(crate) mod ping;
 pub(crate) mod subscription;
 pub(crate) mod trigger_subscription_event;
+pub(crate) mod generate_initial_subscription;

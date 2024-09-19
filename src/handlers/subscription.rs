@@ -20,7 +20,7 @@ use std::sync::Arc;
 ///
 /// # Returns
 /// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
-pub async fn put_subscription(
+pub async fn post_subscription(
     header_map: HeaderMap,
     state: State<Arc<AppState>>,
     subscription: Json<Subscription>,
@@ -154,6 +154,57 @@ pub async fn delete_subscription(
 
     // Delete the subscription
     let _deleted = state.subscriptions.remove(&subscription_id.0);
+
+    Ok(StatusCode::OK)
+}
+
+/// Update an existing subscription
+///
+/// # Parameters
+/// - `header_map`: The headers of the request
+/// - `state`: The shared memory state of the application
+/// - `subscription_id`: The ID of the subscription to update as a path parameter
+/// - `subscription`: The subscription object to update
+///
+/// # Returns
+/// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
+pub async fn put_subscription(
+    header_map: HeaderMap,
+    state: State<Arc<AppState>>,
+    subscription_id: Path<String>,
+    subscription: Json<Subscription>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    // Auth
+    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    if !auth_valid {
+        return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
+    }
+
+    // Marshall the subscription
+    let subscription = subscription.0;
+
+    // Check that the subscription ID matches the path parameter, and it exists in storage
+    if subscription.id.is_none() || subscription.id.clone().unwrap() != subscription_id.0 {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Subscription ID mismatch".to_string(),
+        ));
+    }
+    // Check that the subscription exists
+    if !state.subscriptions.contains_key(&subscription_id.0) {
+        return Err((StatusCode::NOT_FOUND, "Subscription not found".to_string()));
+    }
+
+    // Store the subscription
+    //
+    // If this was a real VTN, there should definitely be some more validation here to ensure there's
+    // no multiple customers subscriptions etc, but for the purposes of the testing tool, we'll just ignore any
+    // existing data and overwrite it
+    let _storage = state
+        .subscriptions
+        .insert(subscription.clone().id.unwrap(), subscription.clone());
+
+    debug!("Subscription created/updated: {:?}", subscription);
 
     Ok(StatusCode::OK)
 }
