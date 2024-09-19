@@ -9,7 +9,7 @@ use std::sync::Arc;
 
 /// This handler is to generate an initial subscription object in the VTN. This is intended to mimic behavior
 /// from the UI of the VTN to generate an initial subscription. This can also be completely skipped by generating the subscription
-/// via PUT Subscription endpoint and just checking for access/collision with the subscription ID.
+/// via POST Subscription endpoint and just checking for access/collision with the subscription ID.
 ///
 /// This endpoint can be useful to mimic behavior from E.On Switch VTN where the initial subscription is generated
 /// via the UI.
