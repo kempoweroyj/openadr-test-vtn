@@ -3,6 +3,7 @@ use crate::AppState;
 use axum::extract::{Path, State};
 use axum::http::HeaderMap;
 use axum::Json;
+use log::debug;
 use reqwest::StatusCode;
 use std::sync::Arc;
 
@@ -48,7 +49,9 @@ pub async fn post_subscription(
     // existing data and overwrite it
     let _storage = state
         .subscriptions
-        .insert(subscription.clone().id.unwrap(), subscription);
+        .insert(subscription.clone().id.unwrap(), subscription.clone());
+
+    debug!("Subscription created/updated: {:?}", subscription);
 
     Ok(StatusCode::OK)
 }
@@ -84,6 +87,7 @@ pub async fn get_subscriptions(
         subscriptions_array.push(subscription);
     }
 
+    debug!("Returning subscriptions: {:?}", subscriptions_array);
     Ok(Json(subscriptions_array))
 }
 
@@ -106,6 +110,7 @@ pub async fn get_subscription(
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
 
+    debug!("Getting subscription: {:?}", subscription_id.0);
     // Get the subscription
     let subscription_storage = state.subscriptions.clone();
     let subscription = subscription_storage.get(&subscription_id.0);
@@ -139,6 +144,8 @@ pub async fn delete_subscription(
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
+
+    debug!("Deleting subscription: {:?}", subscription_id.0);
 
     // Ensure the subscription exists
     if !state.subscriptions.contains_key(&subscription_id.0) {

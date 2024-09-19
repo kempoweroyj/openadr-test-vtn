@@ -5,6 +5,7 @@ use crate::AppState;
 use axum::extract::{Path, State};
 use axum::http::HeaderMap;
 use axum::Json;
+use log::{debug, info};
 use reqwest::StatusCode;
 use std::sync::Arc;
 
@@ -27,6 +28,7 @@ pub async fn post_trigger_subscription_event(
     state: State<Arc<AppState>>,
     body: Json<EventParameters>,
 ) -> Result<StatusCode, (StatusCode, String)> {
+    debug!("Triggering subscription event with parameters: {:?}", body);
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {
@@ -38,7 +40,10 @@ pub async fn post_trigger_subscription_event(
     let subscription = subscription_storage.get(&subscription_id.0);
     let subscription_object_operations = match subscription {
         Some(subscription) => subscription.clone().object_operations,
-        None => return Err((StatusCode::NOT_FOUND, "Subscription not found".to_string())),
+        None => {
+            debug!("Subscription not found");
+            return Err((StatusCode::NOT_FOUND, "Subscription not found".to_string()));
+        }
     };
 
     // Validate parameters
@@ -54,6 +59,10 @@ pub async fn post_trigger_subscription_event(
         // Check if the object operations has events as an operation
         if object_operation.object_type.contains(&EVENT) {
             // Send the event to the VEN using the object operation parameters
+            info!(
+                "Sending event to VEN with parameters: {:?}",
+                object_operation
+            );
             let _request = reqwest::Client::new()
                 .post(&object_operation.callback_url)
                 .bearer_auth(&object_operation.bearer_token)

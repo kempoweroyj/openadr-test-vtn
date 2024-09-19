@@ -2,6 +2,7 @@ use crate::utils::openadr_models;
 use crate::utils::openadr_models::{OpenADREvent, Subscription, Values};
 use crate::AppState;
 use dashmap::DashMap;
+use log::debug;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
@@ -14,6 +15,8 @@ use tokio::sync::RwLock;
 /// # Returns
 /// - `Arc<AppState>`: The shared memory state of the application
 pub async fn init_storage() -> Arc<AppState> {
+    debug!("Initializing storage");
+
     let event_storage: RwLock<Vec<OpenADREvent>> = RwLock::new(Vec::new());
 
     // Subscriptions use a map so that we can easily fetch/remove them by id

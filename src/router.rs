@@ -27,6 +27,9 @@ pub fn build_router(shared_memory: Arc<AppState>) -> Router {
         .route("/subscription/:id", get(get_subscription))
         .route("/subscription", get(get_subscriptions))
         .route("/subscription/:id", delete(delete_subscription))
-        .route("/trigger/subscription/:id", post(post_trigger_subscription_event))
+        .route(
+            "/trigger/subscription/:id",
+            post(post_trigger_subscription_event),
+        )
         .with_state(shared_memory)
 }

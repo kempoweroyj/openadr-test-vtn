@@ -1,4 +1,5 @@
 use crate::utils::openadr_models::OpenADREvent;
+use log::debug;
 use serde::{Deserialize, Serialize};
 
 /// Create a test OpenADR event
@@ -12,6 +13,8 @@ use serde::{Deserialize, Serialize};
 /// # Returns
 /// - `OpenADREvent`: The created OpenADR event
 pub async fn create_test_oadr_event(body: EventParameters) -> OpenADREvent {
+    debug!("Creating test event with parameters: {:?}", body);
+
     // Grab time
     let now = chrono::Utc::now();
     let start_time = now + chrono::Duration::minutes(body.minutes_in_future as i64);
