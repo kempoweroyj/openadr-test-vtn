@@ -4,11 +4,11 @@ use crate::handlers::events::get_events;
 use crate::handlers::generate_polled_event::post_generate_polled_event;
 use crate::handlers::ping::get_ping;
 use crate::handlers::subscription::{
-    delete_subscription, get_subscription, get_subscriptions, post_subscription,
+    delete_subscription, get_subscription, get_subscriptions, put_subscription,
 };
 use crate::handlers::trigger_subscription_event::post_trigger_subscription_event;
 use crate::AppState;
-use axum::routing::delete;
+use axum::routing::{delete, put};
 use axum::{routing::get, routing::post, Router};
 use std::sync::Arc;
 
@@ -23,7 +23,7 @@ pub fn build_router(shared_memory: Arc<AppState>) -> Router {
         .route("/events", get(get_events))
         .route("/trigger/event", post(post_generate_polled_event))
         .route("/clear_events", post(post_clear_events))
-        .route("/subscription", post(post_subscription))
+        .route("/subscription", put(put_subscription))
         .route("/subscription/:id", get(get_subscription))
         .route("/subscription", get(get_subscriptions))
         .route("/subscription/:id", delete(delete_subscription))

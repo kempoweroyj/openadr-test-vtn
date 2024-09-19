@@ -20,7 +20,7 @@ use std::sync::Arc;
 ///
 /// # Returns
 /// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
-pub async fn post_subscription(
+pub async fn put_subscription(
     header_map: HeaderMap,
     state: State<Arc<AppState>>,
     subscription: Json<Subscription>,

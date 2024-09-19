@@ -35,8 +35,10 @@ async fn main() {
     // Build the router
     let router = router::build_router(event_storage);
 
+    let app_listener_bind = "127.0.0.1:8080";
+    info!("Starting listener on: {}", app_listener_bind);
     // run the app
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080")
+    let listener = tokio::net::TcpListener::bind(app_listener_bind)
         .await
         .unwrap();
     axum::serve(listener, router).await.unwrap();
