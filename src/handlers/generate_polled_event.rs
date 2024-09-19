@@ -1,10 +1,8 @@
 use crate::utils::create_test_oadr_event::{create_test_oadr_event, EventParameters};
-use crate::utils::openadr_models::OpenADREvent;
 use crate::AppState;
 use axum::extract::State;
 use axum::http::{HeaderMap, StatusCode};
 use axum::Json;
-use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 /// Generate an event that can be polled from the get_events endpoint
