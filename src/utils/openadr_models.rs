@@ -60,6 +60,7 @@ pub struct EventPayloadDescriptor {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum PayloadDescriptorType {
     #[serde(rename = "EVENT_PAYLOAD_DESCRIPTOR")]
     EVENT,
@@ -147,6 +148,7 @@ pub enum Values {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum ObjectTypes {
     PROGRAM,
     EVENT,
@@ -202,6 +204,7 @@ pub struct Operations {
 
 /// Possible subscription operation types
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum Operation {
     GET,
     POST,
