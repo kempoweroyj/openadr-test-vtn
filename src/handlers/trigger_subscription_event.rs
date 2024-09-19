@@ -23,9 +23,9 @@ use std::sync::Arc;
 /// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
 pub async fn post_trigger_subscription_event(
     header_map: HeaderMap,
-    body: Json<EventParameters>,
     subscription_id: Path<String>,
     state: State<Arc<AppState>>,
+    body: Json<EventParameters>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
