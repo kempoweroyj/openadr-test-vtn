@@ -48,7 +48,7 @@ pub async fn post_generate_initial_subscription(
                 operations: vec![POST],
             },
             callback_url: "https://dev.kempower.io/api/openadr3/event".to_string(),
-            bearer_token: "".to_string()
+            bearer_token: "".to_string(),
         }],
         targets: None,
     };
