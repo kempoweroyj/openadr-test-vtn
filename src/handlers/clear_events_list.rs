@@ -7,7 +7,10 @@ use std::sync::Arc;
 ///
 /// Can be used to test the /events endpoint with an empty list of events and ensure poller handles empty
 /// event lists gracefully
-pub async fn post_clear_events(shared_memory: State<Arc<AppState>>, header_map: HeaderMap) -> Result<StatusCode, (StatusCode, String)> {
+pub async fn post_clear_events(
+    shared_memory: State<Arc<AppState>>,
+    header_map: HeaderMap,
+) -> Result<StatusCode, (StatusCode, String)> {
     // auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {

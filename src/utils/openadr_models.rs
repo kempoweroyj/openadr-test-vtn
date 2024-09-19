@@ -59,7 +59,7 @@ pub struct EventPayloadDescriptor {
     pub currency: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum PayloadDescriptorType {
     #[serde(rename = "EVENT_PAYLOAD_DESCRIPTOR")]
     EVENT,
@@ -106,7 +106,7 @@ pub struct ReportDescriptor {
     pub repeat: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Interval {
     /// Id of the interval
     pub id: i64,
@@ -118,7 +118,7 @@ pub struct Interval {
     pub payloads: Vec<ValuesMap>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct IntervalPeriod {
     /// Start time of the interval in iso8601 format
     pub start: String,
@@ -131,14 +131,14 @@ pub struct IntervalPeriod {
     pub randomize_start: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ValuesMap {
     #[serde(rename = "type")]
     pub kind: String,
     pub values: Vec<Values>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum Values {
     String(String),
@@ -146,7 +146,7 @@ pub enum Values {
     Boolean(bool),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum ObjectTypes {
     PROGRAM,
     EVENT,

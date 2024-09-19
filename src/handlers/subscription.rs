@@ -22,7 +22,8 @@ use std::sync::Arc;
 pub async fn post_subscription(
     header_map: HeaderMap,
     state: State<Arc<AppState>>,
-    subscription: Json<Subscription>) -> Result<StatusCode, (StatusCode, String)> {
+    subscription: Json<Subscription>,
+) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {
@@ -34,7 +35,10 @@ pub async fn post_subscription(
 
     // Validate that an ID exists. Unlike the actual standard, in reality this is actually required every time
     if subscription.id.is_none() {
-        return Err((StatusCode::BAD_REQUEST, "Subscription ID is required".to_string()));
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Subscription ID is required".to_string(),
+        ));
     }
 
     // Store the subscription
@@ -42,7 +46,9 @@ pub async fn post_subscription(
     // If this was a real VTN, there should definitely be some more validation here to ensure there's
     // no multiple customers subscriptions etc, but for the purposes of the testing tool, we'll just ignore any
     // existing data and overwrite it
-    let _storage = state.subscriptions.insert(subscription.clone().id.unwrap(), subscription);
+    let _storage = state
+        .subscriptions
+        .insert(subscription.clone().id.unwrap(), subscription);
 
     Ok(StatusCode::OK)
 }
@@ -59,7 +65,10 @@ pub async fn post_subscription(
 ///
 /// # Returns
 /// - `Result<Vec<Subscription>, (StatusCode, String)>`: The list of subscriptions, or an error if the request failed
-pub async fn get_subscriptions(header_map: HeaderMap, state: State<Arc<AppState>>) -> Result<Json<Vec<Subscription>>, (StatusCode, String)> {
+pub async fn get_subscriptions(
+    header_map: HeaderMap,
+    state: State<Arc<AppState>>,
+) -> Result<Json<Vec<Subscription>>, (StatusCode, String)> {
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {
@@ -86,7 +95,11 @@ pub async fn get_subscriptions(header_map: HeaderMap, state: State<Arc<AppState>
 /// - `header_map`: The headers of the request
 /// - `state`: The shared memory state of the application
 /// - `subscription_id`: The ID of the subscription to get as a path parameter
-pub async fn get_subscription(header_map: HeaderMap, state: State<Arc<AppState>>, subscription_id: Path<String>) -> Result<Json<Subscription>, (StatusCode, String)> {
+pub async fn get_subscription(
+    header_map: HeaderMap,
+    state: State<Arc<AppState>>,
+    subscription_id: Path<String>,
+) -> Result<Json<Subscription>, (StatusCode, String)> {
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {
@@ -99,7 +112,7 @@ pub async fn get_subscription(header_map: HeaderMap, state: State<Arc<AppState>>
 
     match subscription {
         Some(subscription) => Ok(Json(subscription.clone())),
-        None => Err((StatusCode::NOT_FOUND, "Subscription not found".to_string()))
+        None => Err((StatusCode::NOT_FOUND, "Subscription not found".to_string())),
     }
 }
 
@@ -116,7 +129,11 @@ pub async fn get_subscription(header_map: HeaderMap, state: State<Arc<AppState>>
 ///
 /// # Returns
 /// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
-pub async fn delete_subscription(header_map: HeaderMap, state: State<Arc<AppState>>, subscription_id: Path<String>) -> Result<StatusCode, (StatusCode, String)> {
+pub async fn delete_subscription(
+    header_map: HeaderMap,
+    state: State<Arc<AppState>>,
+    subscription_id: Path<String>,
+) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
     let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
     if !auth_valid {

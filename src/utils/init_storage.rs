@@ -18,7 +18,10 @@ pub async fn init_storage() -> Arc<AppState> {
 
     // Subscriptions use a map so that we can easily fetch/remove them by id
     let subscriptions: DashMap<String, Subscription> = DashMap::new();
-    let shared_memory = AppState { event_storage, subscriptions };
+    let shared_memory = AppState {
+        event_storage,
+        subscriptions,
+    };
     Arc::new(shared_memory)
 }
 
