@@ -15,13 +15,8 @@ pub struct AppState {
     pub subscriptions: DashMap<String, Subscription>,
 }
 
-#[tokio::main]
-async fn main() {
-    // loading env file
-    dotenvy::dotenv().expect("Failed to load .env file");
-
-    // Starting logger
-    env_logger::builder().format_timestamp_millis().init();
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
     info!("Logger started");
 
     // initialize the event storage array. This is very much a dummy in memory solution that will clear on restart
@@ -35,11 +30,6 @@ async fn main() {
     // Build the router
     let router = router::build_router(event_storage);
 
-    let app_listener_bind = "127.0.0.1:8080";
-    info!("Starting listener on: {}", app_listener_bind);
-    // run the app
-    let listener = tokio::net::TcpListener::bind(app_listener_bind)
-        .await
-        .unwrap();
-    axum::serve(listener, router).await.unwrap();
+
+    Ok(router.into())
 }
