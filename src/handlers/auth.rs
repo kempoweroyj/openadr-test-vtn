@@ -1,6 +1,9 @@
+use crate::AppState;
 use axum::extract::multipart::Multipart;
+use axum::extract::State;
 use axum::http::{HeaderMap, StatusCode};
 use log::debug;
+use std::sync::Arc;
 
 /// Dummy handler for the auth flow
 ///
@@ -15,11 +18,17 @@ use log::debug;
 /// # Returns
 /// - `Result<&'static str, (StatusCode, String)>`: The token if the auth is successful, otherwise an error
 pub async fn post_auth(
+    state: State<Arc<AppState>>,
     headers: HeaderMap,
     mut body: Multipart,
-) -> Result<&'static str, (StatusCode, String)> {
+) -> Result<String, (StatusCode, String)> {
+    // Fetch secrets
+    let secrets = &state.secrets;
+
     // Extract auth headers and validate them
-    let valid_header = "Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk"; // testuser:testpassword
+    let valid_header = secrets
+        .get("BASIC_AUTH_HEADER")
+        .expect("BASIC_AUTH_HEADER not set!"); // Panic if secret not set
     let auth_header = headers.get("Authorization");
     match auth_header {
         Some(header) => {
@@ -76,5 +85,6 @@ pub async fn post_auth(
         ));
     }
 
-    Ok("iamasupersecrettoken")
+    let token = secrets.get("DUMMY_TOKEN").expect("DUMMY_TOKEN not set");
+    Ok(token)
 }

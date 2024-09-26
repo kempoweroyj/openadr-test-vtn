@@ -17,7 +17,7 @@ pub async fn post_generate_polled_event(
     body: Json<EventParameters>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // auth TODO should be different auth method for these admin endpoints
-    let auth_valid = crate::utils::authorizer::authorizer(headers).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&shared_mem.secrets, headers).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }

@@ -26,7 +26,7 @@ pub async fn post_subscription(
     subscription: Json<Subscription>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
@@ -73,7 +73,7 @@ pub async fn get_subscriptions(
     state: State<Arc<AppState>>,
 ) -> Result<Json<Vec<Subscription>>, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
@@ -105,7 +105,7 @@ pub async fn get_subscription(
     subscription_id: Path<String>,
 ) -> Result<Json<Subscription>, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
@@ -140,7 +140,7 @@ pub async fn delete_subscription(
     subscription_id: Path<String>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
@@ -175,7 +175,7 @@ pub async fn put_subscription(
     subscription: Json<Subscription>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }

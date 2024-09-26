@@ -12,7 +12,7 @@ pub async fn post_clear_events(
     header_map: HeaderMap,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&shared_memory.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }

@@ -1,2 +1,0 @@
-[env]
-RUST_LOG = "ce_poc_kempower_vtn=debug"

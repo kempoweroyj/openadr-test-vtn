@@ -3,6 +3,7 @@ use crate::utils::openadr_models::{OpenADREvent, Subscription, Values};
 use crate::AppState;
 use dashmap::DashMap;
 use log::debug;
+use shuttle_runtime::SecretStore;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
@@ -14,7 +15,7 @@ use tokio::sync::RwLock;
 ///
 /// # Returns
 /// - `Arc<AppState>`: The shared memory state of the application
-pub async fn init_storage() -> Arc<AppState> {
+pub async fn init_storage(secrets: SecretStore) -> Arc<AppState> {
     debug!("Initializing storage");
 
     let event_storage: RwLock<Vec<OpenADREvent>> = RwLock::new(Vec::new());
@@ -24,6 +25,7 @@ pub async fn init_storage() -> Arc<AppState> {
     let shared_memory = AppState {
         event_storage,
         subscriptions,
+        secrets,
     };
     Arc::new(shared_memory)
 }
@@ -44,11 +46,11 @@ pub async fn dummy_event_to_storage(shared_memory: &Arc<AppState>) {
         targets: Some(vec![
             openadr_models::ValuesMap {
                 kind: "RESOURCE_NAME".to_string(),
-                values: vec![Values::String("LISA".to_string())],
+                values: vec![Values::String("DUMMY".to_string())],
             },
             openadr_models::ValuesMap {
                 kind: "ORGANIZATION_ID".to_string(),
-                values: vec![Values::String("81".to_string())],
+                values: vec![Values::String("123".to_string())],
             },
         ]),
         report_descriptors: Some(vec![]),

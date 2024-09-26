@@ -24,7 +24,7 @@ pub async fn get_events(
     shared_memory: State<Arc<AppState>>,
 ) -> Result<Json<Vec<OpenADREvent>>, (StatusCode, String)> {
     // auth
-    let valid = authorizer(headers).await;
+    let valid = authorizer(&shared_memory.secrets, headers).await;
     if !valid {
         debug!("Invalid auth header");
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));

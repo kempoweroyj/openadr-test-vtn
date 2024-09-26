@@ -27,7 +27,7 @@ pub async fn post_generate_initial_subscription(
     header_map: HeaderMap,
 ) -> Result<StatusCode, (StatusCode, String)> {
     // Auth
-    let auth_valid = crate::utils::authorizer::authorizer(header_map).await;
+    let auth_valid = crate::utils::authorizer::authorizer(&state.secrets, header_map).await;
     if !auth_valid {
         return Err((StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()));
     }
