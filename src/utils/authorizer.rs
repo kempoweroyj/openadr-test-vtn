@@ -36,7 +36,7 @@ mod tests {
     #[tokio::test]
     async fn test_authorizer() {
         // Loading secrets with dotenvy to get the dummy token for testing
-        dotenvy::from_filename("Secrets.toml").expect("Failed to load secrets.toml for unit tests");
+        dotenvy::from_filename("Secrets.test.toml").expect("Failed to load secrets.toml for unit tests");
         let dummy_token = env::var("DUMMY_TOKEN").expect("couldn't load dummy token variable");
 
         // Build dummy secrets store for testing

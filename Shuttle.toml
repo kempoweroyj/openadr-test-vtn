@@ -1,1 +1,5 @@
 name = "kp-test-vtn"
+assets = [
+    "Secrets.test.toml",
+    ".cargo/config.toml",
+]
