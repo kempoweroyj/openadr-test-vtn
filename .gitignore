@@ -1,4 +1,17 @@
+# Cargo files
 /target
+/debug
+/.cargo/config.toml
+
+# Rustfmt backups
+**/*.rs.bk
+
+# MSVC Windows build files
+*.pdb
+
+# Shuttle secrets
 Secrets.toml
 Secrets.dev.toml
-/.cargo/config.toml
+
+# Jetbrains IDE files
+.idea
