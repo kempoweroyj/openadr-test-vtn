@@ -9,8 +9,8 @@ use std::sync::Arc;
 
 /// Handler for the /events endpoint
 ///
-/// This function returns a dummy OpenADR event object for an event in the past to test basic event handling response
-/// mimicking a GET Events call to the VTN server. If a new event has been generated using the generate_event handler, the new generated event
+/// This function returns an array of OpenADR events that are stored in the shared memory state of the application,
+/// mimicking a GET Events call to the VTN server. If new events have been generated using the generate_event handler, the new generated events
 /// will also be returned here.
 ///
 /// # Parameters
@@ -18,7 +18,7 @@ use std::sync::Arc;
 /// - `shared_memory`: The shared memory state of the application
 ///
 /// # Returns
-/// - `Result<Json<OpenADREvent>, (StatusCode, String)>`: The OpenADR event object if the auth is successful, otherwise an error
+/// - `Result<Json<Vec<OpenADREvent>>, (StatusCode, String)>`: The OpenADR event array if the auth is successful, otherwise an error
 pub async fn get_events(
     headers: HeaderMap,
     shared_memory: State<Arc<AppState>>,

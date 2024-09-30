@@ -7,11 +7,12 @@ use shuttle_runtime::SecretStore;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
-/// Initialize the event storage for the application
+/// Initialize the application state for the application
 ///
-/// This function initializes the event storage for the application. This is a dummy in memory solution that will clear on restart.
-/// If we ever take this tool to production use, this should be replaced with a proper db solution, probably dynamo.
-/// This is much quicker to deal with for proof of concept purposes.
+/// Initialize event storage and subscriptions storage for the application in memory.
+///
+/// # Parameters
+/// - `secrets`: SecretStore - The secrets store for the application
 ///
 /// # Returns
 /// - `Arc<AppState>`: The shared memory state of the application
@@ -32,11 +33,13 @@ pub async fn init_storage(secrets: SecretStore) -> Arc<AppState> {
 
 /// Add a dummy event to the event storage
 ///
+/// Initial dummy event can be used for basic schema validation and event handling.
+///
 /// # Parameters
 /// - `shared_memory`: The shared memory state of the application
 pub async fn dummy_event_to_storage(shared_memory: &Arc<AppState>) {
     let dummy_event: OpenADREvent = OpenADREvent {
-        id: Some("LisaTest".to_string()),
+        id: Some("dummyTest".to_string()),
         created_date_time: Some("2024-03-06T10:55:26.543Z".to_string()),
         modification_date_time: Some("2024-03-06T10:55:26.543Z".to_string()),
         object_type: Some(openadr_models::ObjectTypes::EVENT),

@@ -11,10 +11,11 @@ use std::sync::Arc;
 /// from the UI of the VTN to generate an initial subscription. This can also be completely skipped by generating the subscription
 /// via POST Subscription endpoint and just checking for access/collision with the subscription ID.
 ///
-/// This endpoint can be useful to mimic behavior from E.On Switch VTN where the initial subscription is generated
+/// This endpoint can be useful to mimic behavior from for VTNs where the initial subscription is generated
 /// via the UI.
 ///
-/// This endpoint will always generate a subscription with the id "test", pointing towards Kempower OpenADR3 API, and will overwrite any existing subscription with the same ID.
+/// This endpoint will always generate a subscription with the id "test", pointing towards a callback URL
+/// specified in the DEFAULT_CALLBACK_URL environment variable and will overwrite any existing subscription with the same ID.
 ///
 /// # Parameters
 /// - `state`: The shared memory state of the application
@@ -34,20 +35,22 @@ pub async fn post_generate_initial_subscription(
 
     let time_now = chrono::Utc::now();
 
+    let callback_url = std::env::var("DEFAULT_CALLBACK_URL").expect("DEFAULT_CALLBACK_URL not set!");
+
     // Create a new subscription
     let subscription = Subscription {
         id: Some("test".to_string()),
         created_date_time: Some(time_now.to_rfc3339()),
         modification_date_time: Some(time_now.to_rfc3339()),
         object_type: Some(SUBSCRIPTION),
-        client_name: "ce_oadr3_api".to_string(),
+        client_name: "testing_oadr3_VEN".to_string(),
         program_id: "test_program".to_string(),
         object_operations: vec![ObjectOperation {
             object_type: vec![EVENT],
             operations: Operations {
                 operations: vec![POST],
             },
-            callback_url: "https://dev.kempower.io/api/openadr3/event".to_string(),
+            callback_url,
             bearer_token: "".to_string(),
         }],
         targets: None,

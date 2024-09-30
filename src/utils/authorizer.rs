@@ -1,7 +1,7 @@
 use axum::http::HeaderMap;
 use shuttle_runtime::SecretStore;
 
-/// Dummy authorizer, checks for a valid token auth header, which is a static string
+/// Dummy authorizer, checks for a valid token auth header, which is a static string fetched from secrets
 pub async fn authorizer(secret_store: &SecretStore, header_map: HeaderMap) -> bool {
     // Extract auth headers and validate them
     let valid_header = format!(

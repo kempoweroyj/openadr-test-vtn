@@ -7,16 +7,17 @@ use std::sync::Arc;
 
 /// Dummy handler for the auth flow
 ///
-/// Generally speaking the auth flow follows the standard oauth2 flow, we're just going to be returning
-/// static fake token that gets checked for now. Perhaps this should be somewhat real for security reasons
-/// but for now this works well enough.
+/// Generally speaking the auth flow for a VTN should follow the standard oauth2 flow. For simplicity in the test tool,
+/// we're just going to be returning static fake token. The test tool should not be used to store
+/// sensitive data.
 ///
 /// # Parameters
+/// - `state`: The shared memory state of the application
 /// - `headers`: The headers of the request
 /// - `body`: The body of the request, should be multipart form data with grant_type and scope fields
 ///
 /// # Returns
-/// - `Result<&'static str, (StatusCode, String)>`: The token if the auth is successful, otherwise an error
+/// - `Result<String, (StatusCode, String)>`: The token if the auth is successful, otherwise an error
 pub async fn post_auth(
     state: State<Arc<AppState>>,
     headers: HeaderMap,

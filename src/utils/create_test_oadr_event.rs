@@ -5,17 +5,17 @@ use serde::{Deserialize, Serialize};
 /// Create a test OpenADR event
 ///
 /// This function creates a test OpenADR event with the given parameters and returns it for use.
-/// Only creating events with limit type IMPORT_CAPACITY_LIMIT and payload type KW is supported.
+/// Only creating events with limit type IMPORT_CAPACITY_LIMIT and payload type KW is supported for this tool.
 ///
 /// # Parameters
-/// - `body`: The parameters to create the event
+/// - `body`: EventParameters - The parameters for the event
 ///
 /// # Returns
 /// - `OpenADREvent`: The created OpenADR event
 pub async fn create_test_oadr_event(body: EventParameters) -> OpenADREvent {
     debug!("Creating test event with parameters: {:?}", body);
 
-    // Grab time
+    // Grab time and create the start time for the event
     let now = chrono::Utc::now();
     let start_time = now + chrono::Duration::minutes(body.minutes_in_future as i64);
     let event_id = format!("test_event_{}", now.timestamp());
