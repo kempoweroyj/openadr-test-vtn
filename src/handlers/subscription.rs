@@ -7,7 +7,7 @@ use log::debug;
 use reqwest::StatusCode;
 use std::sync::Arc;
 
-/// Create/Update a subscription. If the subscription already exists, it will be updated.
+/// Create a subscription. If the subscription already exists, it will be updated.
 ///
 /// Subscriptions can be used by the VEN receive event/program notifications from the VTN server.
 /// For the purposes of the testing tool, the VTN has to support creating and modifying of the subscription

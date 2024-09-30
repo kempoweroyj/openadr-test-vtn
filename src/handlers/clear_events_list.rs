@@ -7,6 +7,13 @@ use std::sync::Arc;
 ///
 /// Can be used to test the /events endpoint with an empty list of events and ensure poller handles empty
 /// event lists gracefully
+///
+/// # Parameters
+/// - `shared_memory`: The shared memory state of the application
+/// - `header_map`: The headers of the request
+///
+/// # Returns
+/// - `Result<StatusCode, (StatusCode, String)>`: The status code of the request, or an error if the request failed
 pub async fn post_clear_events(
     shared_memory: State<Arc<AppState>>,
     header_map: HeaderMap,

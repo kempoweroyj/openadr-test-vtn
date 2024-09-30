@@ -3,28 +3,32 @@
 ## Overview
 
 This is standalone application intended to mimic the basic behavior of
-a OpenADR 3.0 Virtual Top Node (VTN) for testing purposes. Most behavior is
+an OpenADR 3.0 Virtual Top Node (VTN) for testing purposes. Most behavior is
 simulated and accomplished with dummy behavior and responses.
 
-The application is mostly intended to be a proof of concept and as a result
-doesn't follow the normal architecture for our applications and lacks some basics
+The application is mostly intended to be a tool for automated testing and not a real VTN and as a result
+doesn't implement the entire OpenADR spec and lacks some basics for a production application
 such as persistent storage, opting for simple in memory storage instead.
 
-Contact @juusohel or the Bus & Truck team for more info.
+OpenADR 3.0 is a standards specification for demand response and energy management and provides an standardized
+interface and protocols for communication between energy providers and customers. In the context of EV Charging,
+it can be used, as an example, to manage grid load by limiting available charging power during specified time periods.
+Kempower ChargEye features OpenADR 3.0 support, allowing for integration with energy providers and grid operators.
 
 ## Usage
 
 The Test VTN has simple endpoints retrieving events and managing subscriptions.
 It does not support multiple organizations, so the assumption is that only one VEN is connected to it.
 Aside from the basic VTN endpoints, the application has "admin" endpoints to trigger certain
-behavior like generating new events or clearing the event list.
+behavior like generating new events or clearing the event list. These are intended to be used as
+part of automated test flow.
 
 ### Basic Endpoints
 
 #### Auth
 
 Endpoints required a valid bearer token fetched from the `/auth` endpoint.
-The current token is a dummy token and is hardcoded, nothing secret should be stored in the application memory.
+The token is a dummy token and is hardcoded, nothing secret should be stored in the application memory.
 
 #### Endpoints
 
@@ -50,7 +54,7 @@ and subscriptions and clearing the event list.
 #### Auth
 
 Currently, requires the same authentication token as the basic endpoints. In production use we might want this to be
-something more secure.
+something more secure. If security is a concern, proper token generation and authorization should be implemented.
 
 #### Endpoints
 
@@ -78,60 +82,55 @@ The application is deployed as a standalone application using [Shuttle.rs](https
 To run the application locally: `cargo shuttle run` - You will need rust and cargo installed.
 [Shuttle docs](https://docs.shuttle.rs/introduction/welcome)
 
+### Secrets and environment variables
+
+Shuttle passes secrets to the application at runtime using the `Secrets.toml file`. An example of required secrets is
+provided in the `Secrets.example.toml` file.
+
 ## Test flow examples
 
-None of these test cases are currently implemented, but could be configured for the OpenADR 3.0 API Automated tests in
-the future.
+Following are example test flows that can be implemented using the Test VTN and a production VEN to test OpenADR 3.0
+functionality and behavior.
 
 ### VEN Polling
 
-1. ChargEye OpenADR 3.0 polls the VTN for events with no active events.
+1. OpenADR 3.0 VEN polls the VTN for events with no active events.
     - Authentication token fetched from the `/auth` endpoint.
-    - ChargEye OpenADR 3.0 polls the VTN for events - `GET /events`.
-    - ChargEye OpenADR 3.0 receives the event list with no active events.
-    - ChargEye OpenADR 3.0 processes the events.
-    - Lack of active events results in no action taken by ChargEye OpenADR 3.0.
-2. ChargEye OpenADR 3.0 polls the VTN for events with an active event.
+    - OpenADR 3.0 VEN polls the VTN for events - `GET /events`.
+    - OpenADR 3.0 VEN receives the event list with no active events.
+    - OpenADR 3.0 VEN processes the events.
+    - Lack of active events results in no action taken by OpenADR 3.0 VEN.
+2. OpenADR 3.0 VEN polls the VTN for events with an active event.
     - Virtual Charger set up to charge.
     - Automated test suite generates an event with a start time in the future.
         - `POST /admin/trigger/event` with desired parameters
     - Authentication token fetched from the `/auth` endpoint.
-    - ChargEye OpenADR 3.0 polls the VTN for events - `GET /events`.
-    - ChargEye OpenADR 3.0 receives the event list with an active event.
-    - ChargEye OpenADR 3.0 processes the events.
-    - Virtual charger monitored to ensure application of event limits.
+    - OpenADR 3.0 VEN polls the VTN for events - `GET /events`.
+    - OpenADR 3.0 VEN receives the event list with an active event.
+    - OpenADR 3.0 VEN processes the events.
+    - Assets monitored to ensure completion of event.
 
 ### VEN Subscription
 
-1. ChargEye OpenADR 3.0 creates a subscription and receives event. (PUSH method of receiving events)
+1. OpenADR 3.0 VEN creates a subscription and receives event. (PUSH method of receiving events)
     - Virtual charger set up to charge.
     - A subscription object is created with desired parameters.
         - Intended to mimic frontend subscription creation.
-    - ChargEye OpenADR 3.0 attempts to register the subscription with the VTN - `POST /subscription`.
-    - ChargEye OpenADR 3.0 receives a successful response.
+    - OpenADR 3.0 VEN attempts to register the subscription with the VTN - `POST /subscription`.
+    - OpenADR 3.0 VEN receives a successful response.
     - A subscription event is triggered by the VTN - `POST /admin/trigger/subscription/{id}`.
-    - ChargEye OpenADR 3.0 receives the event and processes it.
-    - Virtual charger monitored to ensure application of event limits.
+    - OpenADR 3.0 VEN receives the event and processes it.
+    - Assets monitored to ensure completion of event.
 2. Refreshing access token of an already created subscription
     - Virtual charger set up to charge
     - Create initial subscription in test VTN - `POST /admin/trigger/initial_subscription`
-    - ChargEye OpenADR 3.0 fetches subscription from VTN - `GET /subscription/test`
-    - ChargEye OpenADR 3.0 refreshes the access token of the subscription and updates the VTN record -
+    - OpenADR 3.0 VEN fetches subscription from VTN - `GET /subscription/test`
+    - OpenADR 3.0 VEN refreshes the access token of the subscription and updates the VTN record -
       `PUT /subscription/test`
     - New event is triggered by the VTN - `POST /admin/trigger/subscription/{id}`
-    - ChargEye OpenADR 3.0 receives the event and processes it.
-    - Virtual charger monitored to ensure application of event limits.
+    - Assets monitored to ensure completion of event.
 
 ## Tech
 
 The application is built with [axum](https://github.com/tokio-rs/axum) as the main framework and deployed
 with [Shuttle.rs](https://www.shuttle.rs/).
-It's very much a quick and dirty proof of concept intended to gauge the viability of building a VTN to test OpenADR 3.0
-services without having
-to rely on 3rd party VTN's or real VTN logic.
-
-
-
-
-
-

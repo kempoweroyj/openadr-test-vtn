@@ -8,7 +8,7 @@ use std::sync::Arc;
 /// Dummy handler for the auth flow
 ///
 /// Generally speaking the auth flow for a VTN should follow the standard oauth2 flow. For simplicity in the test tool,
-/// we're just going to be returning static fake token. The test tool should not be used to store
+/// we're just going to be returning static fake token defined in Secrets. The test tool should not be used to store
 /// sensitive data.
 ///
 /// # Parameters
