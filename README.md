@@ -23,6 +23,19 @@ Aside from the basic VTN endpoints, the application has "admin" endpoints to tri
 behavior like generating new events or clearing the event list. These are intended to be used as
 part of automated test flow.
 
+The Test VTN supports basic OpenADR 3.0 functionality:
+
+- Receive events via PUSH/PULL methods
+- Manage subscriptions
+- Trigger events for testing purposes
+
+Not implemented (yet):
+
+- Reporting
+    - Requiring or receiving reports from VENs
+- Different payload types
+    - Currently only supports simple event payloads
+
 ### Basic Endpoints
 
 #### Auth
