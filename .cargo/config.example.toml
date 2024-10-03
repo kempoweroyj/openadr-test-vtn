@@ -1,0 +1,3 @@
+[env]
+RUST_LOG = "binary-name=debug" # Logging configuration - https://docs.rs/env_logger/latest/env_logger/
+DEFAULT_CALLBACK_URL = "https://example.com/api/openadr3/event" # OpenADR 3.0 VEN callback URL, for example Kempower ChargEye
