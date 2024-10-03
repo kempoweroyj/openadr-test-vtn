@@ -1,5 +1,5 @@
 [package]
-name = "ce_poc_kempower_vtn"
+name = "ce_app_kempower_vtn"
 version = "0.1.0"
 edition = "2021"
 
