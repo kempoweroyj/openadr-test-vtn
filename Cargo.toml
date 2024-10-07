@@ -1,5 +1,5 @@
 [package]
-name = "ce_app_kempower_vtn"
+name = "openadr_test_vtn"
 version = "0.1.0"
 edition = "2021"
 

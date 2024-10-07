@@ -329,26 +329,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ce_app_kempower_vtn"
-version = "0.1.0"
-dependencies = [
- "axum 0.7.7",
- "axum-macros",
- "chrono",
- "dashmap",
- "dotenvy",
- "env_logger",
- "log",
- "reqwest 0.12.8",
- "serde",
- "serde_json",
- "shuttle-axum",
- "shuttle-common",
- "shuttle-runtime",
- "tokio",
-]
-
-[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1258,6 +1238,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "82881c4be219ab5faaf2ad5e5e5ecdff8c66bd7402ca3160975c93b24961afd1"
 dependencies = [
  "portable-atomic",
+]
+
+[[package]]
+name = "openadr_test_vtn"
+version = "0.1.0"
+dependencies = [
+ "axum 0.7.7",
+ "axum-macros",
+ "chrono",
+ "dashmap",
+ "dotenvy",
+ "env_logger",
+ "log",
+ "reqwest 0.12.8",
+ "serde",
+ "serde_json",
+ "shuttle-axum",
+ "shuttle-common",
+ "shuttle-runtime",
+ "tokio",
 ]
 
 [[package]]

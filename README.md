@@ -1,6 +1,6 @@
-# Kempower Test VTN
+# OpenADR Test VTN
 
-## Overview
+## Overview and Purpose
 
 This is standalone application intended to mimic the basic behavior of
 an OpenADR 3.0 Virtual Top Node (VTN) for testing purposes. Most behavior is
@@ -14,6 +14,10 @@ OpenADR 3.0 is a standards specification for demand response and energy manageme
 interface and protocols for communication between energy providers and customers. In the context of EV Charging,
 it can be used, as an example, to manage grid load by limiting available charging power during specified time periods.
 Kempower ChargEye features OpenADR 3.0 support, allowing for integration with energy providers and grid operators.
+
+We invite contributions to expand the project as a testing tool and application for OpenADR 3.0 development.
+Use cases detailed in the OpenADR3 specification such as report handling, price management and more complex event
+payloads are examples of features that could be implemented.
 
 ## Usage
 
